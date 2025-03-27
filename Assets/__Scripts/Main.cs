@@ -9,7 +9,7 @@ public class Main : MonoBehaviour
     static private Main S;                        // A private singleton for Main
     static private Dictionary<eWeaponType, WeaponDefinition> WEAP_DICT;
 
-
+    private SoundEffectsPlayer sfxPlayer;
     [Header("Inscribed")]
     public bool spawnEnemies = true;
     public GameObject[] prefabEnemies;               // Array of Enemy prefabs
@@ -72,6 +72,10 @@ public class Main : MonoBehaviour
         // Invoke SpawnEnemy() again
         Invoke(nameof(SpawnEnemy), 1f / enemySpawnPerSecond);                // g
     }
+    void Start()
+    {
+        sfxPlayer = FindObjectOfType<SoundEffectsPlayer>();
+    }
 
     void DelayedRestart()
     {                                                   // c
@@ -133,6 +137,9 @@ public class Main : MonoBehaviour
             // Set it to the position of the destroyed ship
             pUp.transform.position = e.transform.position;
         }
+        //add destroy sfx
+        S.sfxPlayer.enemyDeath();
+
     }
 
 }

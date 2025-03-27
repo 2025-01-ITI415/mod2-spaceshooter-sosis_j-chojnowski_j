@@ -46,6 +46,7 @@ public class Hero : MonoBehaviour
         ClearWeapons();
         weapons[0].SetType(eWeaponType.blaster);
     }
+    
 
     void Update()
     {
@@ -72,6 +73,8 @@ public class Hero : MonoBehaviour
         if (Input.GetAxis("Jump") == 1 && fireEvent != null)
         {
             fireEvent();
+            //shoot sfx
+            //sfxPlayer.fireSound();
         }
 
     }

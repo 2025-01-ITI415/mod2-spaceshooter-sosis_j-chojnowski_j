@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class Hero : MonoBehaviour
@@ -15,6 +16,9 @@ public class Hero : MonoBehaviour
     public GameObject projectilePrefab;
     public float projectileSpeed = 40;
     public Weapon[] weapons;
+    float slowdownModifier = 1f;
+    float slowdownValue = 0.2f;
+    float slowdownDuration = 10f;
 
     [Header("Dynamic")]
     [Range(0, 4)]
@@ -55,8 +59,8 @@ public class Hero : MonoBehaviour
 
         // Change transform.position based on the axes
         Vector3 pos = transform.position;
-        pos.x += hAxis * speed * Time.deltaTime;
-        pos.y += vAxis * speed * Time.deltaTime;
+        pos.x += hAxis * speed * slowdownModifier * Time.deltaTime;
+        pos.y += vAxis * speed * slowdownModifier * Time.deltaTime;
         transform.position = pos;
 
         // Rotate the ship to make it feel more dynamic                       // e
@@ -103,6 +107,7 @@ public class Hero : MonoBehaviour
 
         Enemy enemy = go.GetComponent<Enemy>();                               // e
         PowerUp pUp = go.GetComponent<PowerUp>();
+        DeBuff dBf = go.GetComponent<DeBuff>();
 
         if (enemy != null)
         {  // If the shield was triggered by an enemy
@@ -113,12 +118,22 @@ public class Hero : MonoBehaviour
         {
             AbsorbPowerUp(pUp);
         }
+        else if (dBf != null) {
+            AbsordDeBuff(dBf);
+            StartCoroutine(TemporarySlowdown());
+            
+        }
         else
         {
             Debug.LogWarning("Shield trigger hit by non-Enemy: " + go.name);    // g
         }
     }
 
+    IEnumerator TemporarySlowdown() {
+            slowdownModifier = slowdownValue;
+            yield return new WaitForSeconds(slowdownDuration);
+            slowdownModifier = 1f;
+    }
     public float shieldLevel
     {
         get { return (_shieldLevel); }                                      // b
@@ -159,6 +174,11 @@ public class Hero : MonoBehaviour
         {
             w.SetType(eWeaponType.none);
         }
+    }
+
+    public void AbsordDeBuff(DeBuff dBf) {
+        Debug.Log("Absorbed DeBuff");
+        dBf.AbsorbedBy(this.gameObject);
     }
 
     public void AbsorbPowerUp(PowerUp pUp)

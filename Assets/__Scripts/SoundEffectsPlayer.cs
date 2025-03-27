@@ -8,6 +8,9 @@ public class SoundEffectsPlayer : MonoBehaviour
     public AudioSource src2;
     public AudioSource src3;
     public AudioSource src4;
+    public AudioSource PUObject;
+    public AudioSource streakObject;
+
     public AudioClip sfx1, sfx2, sfx3, sfx4, sfx5, sfx6, rarePU, rarePUwords, fiveKS, tenKS, fifteenKS;
     public void enemyDeath()
     {
@@ -26,8 +29,8 @@ public class SoundEffectsPlayer : MonoBehaviour
     }
     public void powerUp()
     {
-        src.clip = sfx4;
-        src.Play();
+        PUObject.clip = sfx4;
+        PUObject.Play();
     }
     public void backgroundMusic()
     {
@@ -43,23 +46,23 @@ public class SoundEffectsPlayer : MonoBehaviour
     {
         src.clip = rarePU;
         src.Play();
-        src4.clip = rarePUwords;
-        src4.Play();
+        PUObject.clip = rarePUwords;
+        PUObject.Play();
     }
     public void fiveKillStreak()
     {
-        src4.clip = fiveKS;
-        src4.Play();
+        streakObject.clip = fiveKS;
+        streakObject.Play();
     }
     public void tenKillStreak()
     {
-        src4.clip = tenKS;
-        src4.Play();
+        streakObject.clip = tenKS;
+        streakObject.Play();
     }
     public void fifteenKillStreak()
     {
-        src4.clip = fifteenKS;
-        src4.Play();
+        streakObject.clip = fifteenKS;
+        streakObject.Play();
     }
     // Start is called before the first frame update
     void Start()

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Hero : MonoBehaviour
 {
-
+    public GameObject shootObject;
+    private SoundEffectsPlayer sfxPlayer;
     static public Hero S { get; private set; }  // Singleton property    // a
 
     [Header("Inscribed")]
@@ -46,7 +47,10 @@ public class Hero : MonoBehaviour
         ClearWeapons();
         weapons[0].SetType(eWeaponType.blaster);
     }
-    
+    void Start()
+    {
+        sfxPlayer = FindObjectOfType<SoundEffectsPlayer>();
+    }
 
     void Update()
     {
@@ -74,7 +78,21 @@ public class Hero : MonoBehaviour
         {
             fireEvent();
             //shoot sfx
-            //sfxPlayer.fireSound();
+
+            
+            
+
+
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            shootObject.SetActive(true);
+            sfxPlayer.shootSound();  // Play shooting sound
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            shootObject.SetActive(false);
         }
 
     }
@@ -111,6 +129,8 @@ public class Hero : MonoBehaviour
         {  // If the shield was triggered by an enemy
             shieldLevel--;        // Decrease the level of the shield by 1
             Destroy(go);          // … and Destroy the enemy                  // f
+            //shield brake sfx
+            sfxPlayer.shieldBrake();
         }
         else if (pUp != null)
         {
@@ -166,14 +186,17 @@ public class Hero : MonoBehaviour
 
     public void AbsorbPowerUp(PowerUp pUp)
     {
+        
         Debug.Log("Absorbed PowerUp: " + pUp.type);                         // b
         switch (pUp.type)
         {
             case eWeaponType.shield:                                              // a 
+                sfxPlayer.moreShield();
                 shieldLevel++;
                 break;
 
             default:                                                             // b
+                sfxPlayer.powerUp();
                 if (pUp.type == weapons[0].type)
                 { // If it is the same type     // c
                     Weapon weap = GetEmptyWeaponSlot();

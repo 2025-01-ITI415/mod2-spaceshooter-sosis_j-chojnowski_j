@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;   // Enables the loading & reloading of scenes
 
@@ -8,7 +9,7 @@ public class Main : MonoBehaviour
 {
     static private Main S;                        // A private singleton for Main
     static private Dictionary<eWeaponType, WeaponDefinition> WEAP_DICT;
-
+    static public float destroyedEnemy = 0;
     private SoundEffectsPlayer sfxPlayer;
     [Header("Inscribed")]
     public bool spawnEnemies = true;
@@ -75,6 +76,7 @@ public class Main : MonoBehaviour
     void Start()
     {
         sfxPlayer = FindObjectOfType<SoundEffectsPlayer>();
+        
     }
 
     void DelayedRestart()
@@ -139,6 +141,25 @@ public class Main : MonoBehaviour
         }
         //add destroy sfx
         S.sfxPlayer.enemyDeath();
+        //count start here
+        Main.destroyedEnemy++;
+        if(Main.destroyedEnemy==5)
+        {
+            S.sfxPlayer.fiveKillStreak();
+            //play 5 kill streak noise
+        }
+        else if(Main.destroyedEnemy == 10)
+        {
+            //play 10 kill streak noise
+            S.sfxPlayer.tenKillStreak();
+        }
+        else if (Main.destroyedEnemy == 15)
+        {
+            //play 15 kill streak noise
+            S.sfxPlayer.fifteenKillStreak();
+        }
+
+
 
     }
 

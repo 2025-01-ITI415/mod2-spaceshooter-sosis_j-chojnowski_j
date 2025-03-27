@@ -196,7 +196,6 @@ public class Hero : MonoBehaviour
                 break;
 
             default:                                                             // b
-                sfxPlayer.powerUp();
                 if (pUp.type == weapons[0].type)
                 { // If it is the same type     // c
                     Weapon weap = GetEmptyWeaponSlot();
@@ -204,12 +203,30 @@ public class Hero : MonoBehaviour
                     {
                         // Set it to pUp.type
                         weap.SetType(pUp.type);
+                        if(pUp.type== eWeaponType.spread)
+                        {
+                            sfxPlayer.rareItem();
+                        }
+                        else
+                        {
+                            sfxPlayer.powerUp();
+                        }
+                        Debug.Log("pUp type is: " + pUp.type);
                     }
                 }
                 else
                 { // If this is a different weapon type                   // d
                     ClearWeapons();
                     weapons[0].SetType(pUp.type);
+                    if (pUp.type == eWeaponType.spread)
+                    {
+                        sfxPlayer.rareItem();
+                    }
+                    else
+                    {
+                        sfxPlayer.powerUp();
+                    }
+                    Debug.Log("pUp type is: "+pUp.type);
                 }
                 break;
 

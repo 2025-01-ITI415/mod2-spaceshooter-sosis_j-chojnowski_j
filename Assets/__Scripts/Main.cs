@@ -8,11 +8,12 @@ public class Main : MonoBehaviour
 {
     static private Main S;                        // A private singleton for Main
     static private Dictionary<eWeaponType, WeaponDefinition> WEAP_DICT;
-
+    static public float destroyedEnemy = 0;
 
     [Header("Inscribed")]
     public bool spawnEnemies = true;
-    public GameObject[] prefabEnemies;               // Array of Enemy prefabs
+    public GameObject[] prefabEnemies;
+    private SoundEffectsPlayer sfxPlayer;// Array of Enemy prefabs
     public float enemySpawnPerSecond = 0.5f;  // # Enemies spawned/second
     public float enemyInsetDefault = 1.5f;    // Inset from the sides
     public float gameRestartDelay = 2.0f;
@@ -109,6 +110,11 @@ public class Main : MonoBehaviour
         //   WeaponDefinition with a type of eWeaponType.none (the default value)
         return (new WeaponDefinition());                                     // c
     }
+    void Start()
+    {
+        sfxPlayer = FindObjectOfType<SoundEffectsPlayer>();
+
+    }
 
     /// <summary>
     /// Called by an Enemy ship whenever it is destroyed. It sometimes creates
@@ -132,6 +138,25 @@ public class Main : MonoBehaviour
 
             // Set it to the position of the destroyed ship
             pUp.transform.position = e.transform.position;
+        }
+        //add destroy sfx
+        S.sfxPlayer.enemyDeath();
+        //count start here
+        Main.destroyedEnemy++;
+        if (Main.destroyedEnemy == 5)
+        {
+            S.sfxPlayer.fiveKillStreak();
+            //play 5 kill streak noise
+        }
+        else if (Main.destroyedEnemy == 10)
+        {
+            //play 10 kill streak noise
+            S.sfxPlayer.tenKillStreak();
+        }
+        else if (Main.destroyedEnemy == 15)
+        {
+            //play 15 kill streak noise
+            S.sfxPlayer.fifteenKillStreak();
         }
     }
 

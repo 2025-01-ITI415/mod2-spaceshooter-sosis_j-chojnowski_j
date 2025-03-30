@@ -10,6 +10,8 @@ public class Hero : MonoBehaviour
 
     [Header("Inscribed")]
     // These fields control the movement of the ship
+    public GameObject shootObject;
+    private SoundEffectsPlayer sfxPlayer;
     public float speed = 30;
     public float rollMult = -45;
     public float pitchMult = 30;
@@ -50,7 +52,10 @@ public class Hero : MonoBehaviour
         ClearWeapons();
         weapons[0].SetType(eWeaponType.blaster);
     }
-
+    void Start()
+    {
+        sfxPlayer = FindObjectOfType<SoundEffectsPlayer>();
+    }
     void Update()
     {
         // Pull in information from the Input class
@@ -76,6 +81,17 @@ public class Hero : MonoBehaviour
         if (Input.GetAxis("Jump") == 1 && fireEvent != null)
         {
             fireEvent();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            shootObject.SetActive(true);
+            sfxPlayer.shootSound();  // Play shooting sound
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            shootObject.SetActive(false);
         }
 
     }
@@ -113,6 +129,7 @@ public class Hero : MonoBehaviour
         {  // If the shield was triggered by an enemy
             shieldLevel--;        // Decrease the level of the shield by 1
             Destroy(go);          // … and Destroy the enemy                  // f
+            sfxPlayer.shieldBrake();
         }
         else if (pUp != null)
         {
@@ -187,6 +204,7 @@ public class Hero : MonoBehaviour
         switch (pUp.type)
         {
             case eWeaponType.shield:                                              // a 
+                sfxPlayer.moreShield();
                 shieldLevel++;
                 break;
 
@@ -198,6 +216,14 @@ public class Hero : MonoBehaviour
                     {
                         // Set it to pUp.type
                         weap.SetType(pUp.type);
+                        if (pUp.type == eWeaponType.spread)
+                        {
+                            sfxPlayer.rareItem();
+                        }
+                        else
+                        {
+                            sfxPlayer.powerUp();
+                        }
                     }
                 }
                 else

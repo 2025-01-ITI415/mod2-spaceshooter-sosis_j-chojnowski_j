@@ -972,6 +972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e58b265a06034356b13ba5ddb7c9c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootObject: {fileID: 630343243}
   speed: 30
   rollMult: -45
   pitchMult: 30
